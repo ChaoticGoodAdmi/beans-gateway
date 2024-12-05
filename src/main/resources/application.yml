@@ -1,0 +1,114 @@
+spring:
+  application:
+    name: beans-gateway
+  main:
+    web-application-type: reactive
+  cloud:
+    gateway:
+      routes:
+        - id: auth-login
+          uri: http://profile-svc
+          predicates:
+            - Path=/auth/login
+          filters:
+            - StripPrefix=0
+        - id: profile
+          uri: http://profile-svc
+          predicates:
+            - Path=/profile
+          filters:
+            - StripPrefix=0
+        - id: coffee-shops
+          uri: http://menu-svc
+          predicates:
+            - Path=/coffee-shops/**
+          filters:
+            - StripPrefix=0
+        - id: menu
+          uri: http://menu-svc
+          predicates:
+            - Path=/menu/**
+          filters:
+            - StripPrefix=0
+        - id: orders
+          uri: http://order-svc
+          predicates:
+            - Path=/orders/**
+          filters:
+            - StripPrefix=0
+        - id: loyalty
+          uri: http://loyalty-svc
+          predicates:
+            - Path=/loyalty/**
+          filters:
+            - StripPrefix=0
+        - id: insight
+          uri: http://insight-svc
+          predicates:
+            - Path=/insight/**
+          filters:
+            - StripPrefix=0
+        - id: journal
+          uri: http://journal-svc
+          predicates:
+            - Path=/journal
+          filters:
+            - StripPrefix=0
+
+security:
+  roles:
+    barista:
+      - method: POST
+        path: /coffee-shops
+      - method: DELETE
+        path: /coffee-shops
+      - method: PATCH
+        path: /menu/item/**
+      - method: POST
+        path: /menu/item
+      - method: GET
+        path: /menu/stop-list
+      - method: GET
+        path: /orders/coffee-shop
+      - method: PUT
+        path: /orders/**
+      - method: GET
+        path: /insight
+      - method: GET
+        path: /insight/items
+      - method: GET
+        path: /insight/profit
+    guest:
+      - method: POST
+        path: /orders
+      - method: GET
+        path: /orders/user
+      - method: GET
+        path: /loyalty/balance
+      - method: GET
+        path: /loyalty/history
+      - method: GET
+        path: /journal
+    common:
+      - method: PUT
+        path: /profile
+      - method: GET
+        path: /coffee-shops
+      - method: GET
+        path: /menu
+      - method: GET
+        path: /menu/item/**
+      - method: GET
+        path: /orders/**
+
+jwt:
+  secret-key: ${JWT_SECRET_KEY:default-secret-key}
+
+logging:
+  level:
+    com.example.gateway.filter: DEBUG
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.security: DEBUG
+
+server:
+  port: 8000
