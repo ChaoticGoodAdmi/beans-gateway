@@ -18,7 +18,7 @@ class SecurityConfig {
             .formLogin { it.disable() }
             .authorizeExchange { exchanges ->
                 exchanges
-                    .pathMatchers("/auth/login", "/profile").permitAll()
+                    .pathMatchers("/auth/login", "/profile", "/actuator/**").permitAll()
                     .anyExchange().permitAll()
             }
             .build()

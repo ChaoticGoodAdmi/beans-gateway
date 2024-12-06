@@ -50,12 +50,10 @@ class JwtFilter(
         val role = Role.valueOf(claims[ROLE_CLAIM].toString())
 
         if (!isRoleAuthorized(role, path, method)) {
-            logger.info("User role {} is incorrect for this path {} {}", role, method, path)
             exchange.response.statusCode = HttpStatus.FORBIDDEN
             return exchange.response.setComplete()
         }
 
-        logger.info("Mutating request with headers X-UserId = {} and X-CoffeeShopId = {}", userId, coffeeShopId)
         val updatedRequest = exchange.request.mutate()
             .header(USER_ID_HEADER, userId)
             .header(COFFEE_SHOP_ID_HEADER, coffeeShopId)
@@ -65,11 +63,11 @@ class JwtFilter(
     }
 
     private fun isRoleAuthorized(role: Role, path: String, method: String): Boolean {
+        if (path.contains("metrics")) return true
         val applicableRules = when (role) {
             Role.GUEST -> rolesConfig.guest + rolesConfig.common
             Role.BARISTA -> rolesConfig.barista + rolesConfig.common
         }
-        logger.info("User role is {} and rules for this role is {}", role, applicableRules)
 
         return applicableRules.any { rule ->
             method.equals(rule.method, ignoreCase = true) && pathMatches(rule.path, path)
@@ -80,24 +78,6 @@ class JwtFilter(
         val regex = pattern.replace("**", ".*").replace("\\{\\w+\\}", "[^/]+").toRegex()
         return regex.matches(path)
     }
-
-/*    private fun getRequiredRoleForPath(path: String, method: String): Role? {
-        return when {
-            path.startsWith("/coffee-shops") -> {
-                if (path.contains("POST") || path.contains("DELETE")) Role.BARISTA
-                else null
-            }
-            path.startsWith("/orders") -> {
-                if (path == "/orders" && method == "POST")
-                if (path.contains("/coffee-shop") || path.contains("/status")) Role.BARISTA
-                else null
-            }
-            path.startsWith("/loyalty") -> Role.GUEST
-            path.startsWith("/insight") -> Role.BARISTA
-            path.startsWith("/journal") -> Role.GUEST
-            else -> null
-        }
-    }*/
 
     override fun getOrder(): Int {
         return Ordered.HIGHEST_PRECEDENCE

@@ -24,10 +24,16 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.cloud:spring-cloud-starter-gateway:4.2.0")
+
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
+
 	implementation("io.jsonwebtoken:jjwt-api:0.11.5")
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
 	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
+
+	implementation("org.springframework.boot:spring-boot-starter-actuator:3.4.0")
+	implementation("io.micrometer:micrometer-registry-prometheus")
+	implementation("io.micrometer:micrometer-core")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.projectreactor:reactor-test")
