@@ -41,6 +41,7 @@ class JwtFilter(
 
         val claims = jwtUtil.validateToken(token)
         if (claims == null) {
+            logger.warn("Claims are not present in jwtToken")
             exchange.response.statusCode = HttpStatus.FORBIDDEN
             return exchange.response.setComplete()
         }
@@ -50,6 +51,7 @@ class JwtFilter(
         val role = Role.valueOf(claims[ROLE_CLAIM].toString())
 
         if (!isRoleAuthorized(role, path, method)) {
+            logger.warn("User with role {} is not authorized for {} - {}", role, path, method)
             exchange.response.statusCode = HttpStatus.FORBIDDEN
             return exchange.response.setComplete()
         }

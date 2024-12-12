@@ -64,6 +64,8 @@ security:
         path: /coffee-shops
       - method: PATCH
         path: /menu/item/**
+      - method: DELETE
+        path: /menu/item/**
       - method: POST
         path: /menu/item
       - method: GET
