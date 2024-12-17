@@ -108,9 +108,9 @@ jwt:
 
 logging:
   level:
-    com.example.gateway.filter: DEBUG
+    ru.ushakov.beansgateway: DEBUG
     org.springframework.cloud.gateway: DEBUG
-    org.springframework.security: DEBUG
+    org.springframework.security: INFO
 
 server:
   port: 8000
