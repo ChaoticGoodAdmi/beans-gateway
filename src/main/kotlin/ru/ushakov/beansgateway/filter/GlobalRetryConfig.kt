@@ -27,7 +27,7 @@ class GlobalRetryConfig : Ordered{
             GET, POST, PUT, PATCH, DELETE
         )
         retryConfig.setStatuses(INTERNAL_SERVER_ERROR,  BAD_GATEWAY, SERVICE_UNAVAILABLE, GATEWAY_TIMEOUT)
-        retryConfig.setBackoff(Duration.ofMillis(3000), Duration.ofSeconds(20), 2, false)
+        retryConfig.setBackoff(Duration.ofMillis(3000), Duration.ofSeconds(10), 2, false)
         retryConfig.setExceptions(
             IOException::class.java
         )
